@@ -1,5 +1,4 @@
 name: Autocoder with DeepSeek
-name: Autocoder Bot
 
 on:
   issues:
