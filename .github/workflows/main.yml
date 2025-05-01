@@ -13,7 +13,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      - name: Make script executable
+      - name: Make the script.sh file executable
         run: chmod +x scripts/script.sh
 
       - name: Run Autocoder Script
