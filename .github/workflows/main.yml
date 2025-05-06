@@ -1,8 +1,8 @@
-name: Autocoder with DeepSeek
+name: generate-code
 
 on:
   issues:
-    types: [opened, reopened, labeled]
+    types: [opened, reopened]
 
 jobs:
   run-autocoder:
@@ -23,8 +23,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}      # second env key: value
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          ./scripts/script.sh "$GITHUB_TOKEN" "$REPOSITORY" "$ISSUE_NUMBER" "$OPENAI_API_KEY"
+        run: ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4                      # action to upload an artifact
