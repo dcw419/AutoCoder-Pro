@@ -1,13 +1,13 @@
 name: generate-code
 
-permissions:
-  contents: read
-  actions: write
-
 on:
   issues:
     types: [opened, reopened, labeled]
-
+    
+permissions:
+  contents: read
+  actions: write
+  
 jobs:
   run-autocoder:
     if: contains(github.event.issue.labels.*.name, 'autocoder-bot')
