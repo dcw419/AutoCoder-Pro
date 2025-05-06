@@ -10,35 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set permissions for script.sh
         run: chmod +x scripts/script.sh
 
-      - name: Run Autocoder Script
+      - name: Generate Code with ChatGPT
+        id: generate_code
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          # first env key: value
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}      # second env key: value
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: ./scripts/script.sh "$GITHUB_TOKEN" "$REPOSITORY" "$ISSUE_NUMBER" "$DEEPSEEK_API_KEY"
+        run: |
+          ./scripts/script.sh "$GITHUB_TOKEN" "$REPOSITORY" "$ISSUE_NUMBER" "$OPENAI_API_KEY"
 
-      - name: Upload generated files as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: autocoder-artifact
-          path: autocoder-bot/
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4                      # action to upload an artifact
+        with:                                                 # params:
+          name: autocoder-artifact                            # inputs
+          path: autocoder-bot/                                # inputs
 
-  download-and-list:
-    needs: run-autocoder
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: autocoder-artifact
-          path: autocoder-artifact
-
-      - name: List files
-        run: ls -R autocoder-artifact
+      - name: Display Generated Code using the ls command
+        run: ls -R autocoder-bot/                             # output code
