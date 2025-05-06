@@ -28,12 +28,16 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: ./scripts/script.sh "$GITHUB_TOKEN" "$REPOSITORY" "$ISSUE_NUMBER" "$DEEPSEEK_API_KEY"
 
-      - name: Upload Artifact
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: autocoder-artifact
+      #     path: autocoder-artifact/
+      - name: Upload generated files as artifact
         uses: actions/upload-artifact@v4
         with:
           name: autocoder-artifact
-          path: autocoder-artifact/
-
+          path: autocoder-bot/
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
