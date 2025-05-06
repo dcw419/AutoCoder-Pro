@@ -2,7 +2,7 @@ name: generate-code
 
 on:
   issues:
-    types: [opened, reopened]
+    types: [opened, reopened, labeled]
 
 jobs:
   run-autocoder:
