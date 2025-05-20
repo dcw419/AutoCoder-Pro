@@ -1,0 +1,49 @@
+name: Interact with ChatGPT
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  interact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "autocoder-bot"
+          git config --global user.email "actions@github.com"
+
+      - name: Make script executable
+        run: chmod +x ./interact.sh
+
+      - name: Run interaction script
+        run: ./interact.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
+
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Add generated code for issue #${{ github.event.inputs.issue_number }}"
+          
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: autocoder-branch-${{ github.event.inputs.issue_number }}
+          base: main
+          title: "Autocoder solution for issue #${{ github.event.inputs.issue_number }}"
+          body: "This pull request contains automatically generated code addressing issue #${{ github.event.inputs.issue_number }}"
+          labels: autocoder-bot
