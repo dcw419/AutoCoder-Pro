@@ -29,7 +29,6 @@ jobs:
 
       - name: Run interaction script
         run: ./scripts/script.sh
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -41,7 +40,7 @@ jobs:
           git commit -m "Add generated code for issue #${{ github.event.inputs.issue_number }}"
           
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v3
         with:
           branch: autocoder-branch-${{ github.event.inputs.issue_number }}
           base: main
